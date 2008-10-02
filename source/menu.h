@@ -1,12 +1,7 @@
 void title_screen() {
       MP3_Load("/data/music/menu.mp3");
       MP3_Play();
-    while(1) {
-             // Rozpocznij rysowanie i odczytaj stan przycisków.
-             oslStartDrawing();
-             oslReadKeys();
-             // Narysuj ekran tytu³owy.
-             oslDrawImage(menu);
+      while(1) {      
              // Jeœli gracz wcisn¹³ trójk¹t...
              if (osl_keys->pressed.triangle)
                {
@@ -35,10 +30,16 @@ void title_screen() {
                obj_x[4]=288;
                obj_y[4]=544;
                obj_i[4]=2;
+               heroHP=100;
                // w³¹cz grê.
                gameplay();
                }
-               // Skonfiguruj czcionkê.
+             // Rozpocznij rysowanie i odczytaj stan przycisków.
+             oslStartDrawing();
+             oslReadKeys();
+             // Narysuj ekran tytu³owy.
+             oslDrawImage(menu);
+             // Skonfiguruj czcionkê.
 	           oslSetTextColor(RGBA(255,255,255,255));
 	           oslSetBkColor(RGBA(0,0,0,0));
 	           // Napisz na ekranie napisy.
@@ -53,4 +54,5 @@ void title_screen() {
 		     oslEndDrawing();
 		     oslSyncFrame();
              }
+               
 }

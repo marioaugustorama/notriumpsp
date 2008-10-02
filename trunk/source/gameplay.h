@@ -7,11 +7,11 @@ void gameplay() {
 		16,16,							//Size of tiles
 		32,33,							//Size of Map
 		OSL_MF_U16);						//Format of Map
+    grass->scrollY += 20;
     MP3_Stop(); 
     MP3_FreeTune();
     MP3_Load("/data/music/bgm1.mp3");
     MP3_Play(); 
-    heroHP=100;
     hits = 0;
     while(1) {
              // Rozpocznij rysowanie i odczytaj stan przycisków.
@@ -19,16 +19,9 @@ void gameplay() {
              oslCls();
              oslReadKeys();
              //"W³¹cz system œmierci
-       if (heroHP == 0) {                
-       MP3_Stop(); 
-       MP3_FreeTune();
-       oslDrawImage(death);
-       oslSetTextColor(RGBA(255,255,255,255));
-       oslSetBkColor(RGBA(0,0,0,0));   
-       oslPrintf_xy(3,4,"You are dead.");
-       oslPrintf_xy(3,4+8,"Press X to back to menu.");
-         if (osl_keys->pressed.cross) { break; }
-       } else {
+       if (heroHP == 0) {
+       break;
+       }
              // Wy³¹cz grê przy wciœniêciu start.
              if (osl_keys->pressed.start)
                {  MP3_Stop(); MP3_FreeTune(); oslQuit(); }
@@ -54,12 +47,23 @@ void gameplay() {
              oslPrintf_xy(8,8,"Press start to exit.");
              oslPrintf_xy(8,16,"Press select to reset your position.");
              oslPrintf_xy(8,24,"Press triangle to pause/resume the music.");
-             
+             oslPrintf_xy(8,32,"Player Hp: %d", heroHP);
              // Skoñcz rysowanie.
 		     oslEndDrawing();
 		     oslSyncFrame();
-             }    
-       }
+             }
+       oslCls();
+       MP3_Stop(); 
+       MP3_FreeTune();
+       oslDrawImage(death);
+       oslSetTextColor(RGBA(255,255,255,255));
+       oslSetBkColor(RGBA(0,0,0,0));   
+       oslPrintf_xy(3,4,"You are dead.");
+       oslPrintf_xy(3,4+8,"Press any key to contiune.");
+       oslEndDrawing();
+       oslSyncFrame();
+       oslWaitKey();
+       title_screen();
 }
 
 void hero_init() {
@@ -77,20 +81,21 @@ void hero_init() {
                               // ...idzie do przodu.
                               herox+=cos(herodirection*3.1415/180)*3;
                               heroy-=sin(herodirection*3.1415/180)*3;
-        if(oslGetSoundChannel(steps) == -1) { oslPlaySound(steps, 2);	}
+                              if(oslGetSoundChannel(steps) == -1) { oslPlaySound(steps, 2);	}
                               }
     // Jeœli gracz trzyma strza³kê w dó³...
     if (osl_keys->held.down) {
                               // ...cofa siê.
                               herox-=cos(herodirection*3.1415/180)*2;
                               heroy+=sin(herodirection*3.1415/180)*2;
-        if(oslGetSoundChannel(steps) == -1) { oslPlaySound(steps, 2);	}
+                              if(oslGetSoundChannel(steps) == -1) { oslPlaySound(steps, 2);	}
                               }
     // Jeœli gracz wcisn¹³ X...
     if (osl_keys->held.cross) {
                               // ...strzela z broni (UWAGA! Narazie TYLKO z Tazora i tylko odtwarzany dzwiek.)
         if(oslGetSoundChannel(tazor) == -1) { oslPlaySound(tazor, 3);	}
                               }
+    if (osl_keys->held.square) { heroHP=0;}
     // Ograniczenia herodirection.
     if(herodirection<0) herodirection+=360;
     if(herodirection>=360) herodirection-=360;

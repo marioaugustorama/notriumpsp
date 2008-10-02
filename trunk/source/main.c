@@ -15,7 +15,8 @@ PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
 // obj_y[10] - pozycja y obiektu
 // obj_i[10] - id rodzaju objektu (1 - blok, ka¿de mniejsze lub wiêksze - nic)
 // view_xview - dla wygody (scroll x)
-float herox, heroy, herodirection, heroHP, obj_x[10], obj_y[10], obj_i[10], view_xview, view_yview;
+float herox, heroy, herodirection, obj_x[10], obj_y[10], obj_i[10], view_xview, view_yview;
+int heroHP;
 // Obrazki (sprity) do gry.
 // menu - ekran tytu³owy
 // blok - symboliczny blok do testowania kolizji

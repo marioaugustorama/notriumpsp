@@ -32,6 +32,8 @@ OSL_MAP *grass;
 int hits;
 #include "menu.h"
 #include "gameplay.h"
+
+
 int main(int argc, char* argv[])
 {
     // Standardowe procedury OSliba.
@@ -42,7 +44,7 @@ int main(int argc, char* argv[])
     oslInitAudio();
     pspAudioInit();
     MP3_Init(1);
-	//Narysuj napis "Notrium Loading" w kolorze jaskrawo¿ó³tym (RGB 255, 255 ,0) i wczytaj potrzebne pliki.
+    //Narysuj napis "Notrium Loading" w kolorze jaskrawo¿ó³tym (RGB 255, 255 ,0) i wczytaj potrzebne pliki.
 	oslStartDrawing();
 	oslSetTextColor(RGBA(255,255,255,255));
 	oslSetBkColor(RGBA(0,0,0,0));

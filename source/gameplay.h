@@ -7,7 +7,6 @@ void gameplay() {
 		16,16,							//Size of tiles
 		32,33,							//Size of Map
 		OSL_MF_U16);						//Format of Map
-    grass->scrollY += 20;
     MP3_Stop(); 
     MP3_FreeTune();
     MP3_Load("/data/music/bgm1.mp3");
@@ -66,6 +65,24 @@ void gameplay() {
        title_screen();
 }
 
+void heromovefoward() {
+herox+=cos(herodirection*3.1415/180)*3;
+heroy-=sin(herodirection*3.1415/180)*3;
+grass->scrollX +=cos(herodirection*3.1415/180)*3;
+grass->scrollY -=sin(herodirection*3.1415/180)*3;
+}
+void heromovebackward(){
+herox-=cos(herodirection*3.1415/180)*2;
+heroy+=sin(herodirection*3.1415/180)*2;
+grass->scrollX +=cos(herodirection*3.1415/180)*2;
+grass->scrollY -=sin(herodirection*3.1415/180)*2;
+}     
+
+
+
+
+
+
 void hero_init() {
     // Jeœli gracz trzyma strza³kê w lewo...
     if (osl_keys->held.left) {
@@ -79,15 +96,13 @@ void hero_init() {
     // Jeœli gracz trzyma strza³kê w górê...
     if (osl_keys->held.up) {
                               // ...idzie do przodu.
-                              herox+=cos(herodirection*3.1415/180)*3;
-                              heroy-=sin(herodirection*3.1415/180)*3;
+                              heromovefoward();
                               if(oslGetSoundChannel(steps) == -1) { oslPlaySound(steps, 2);	}
                               }
     // Jeœli gracz trzyma strza³kê w dó³...
     if (osl_keys->held.down) {
                               // ...cofa siê.
-                              herox-=cos(herodirection*3.1415/180)*2;
-                              heroy+=sin(herodirection*3.1415/180)*2;
+                              heromovebackward();
                               if(oslGetSoundChannel(steps) == -1) { oslPlaySound(steps, 2);	}
                               }
     // Jeœli gracz wcisn¹³ X...
@@ -107,6 +122,7 @@ void hero_init() {
 }
 
 void object_init(int wino) {
+    int i;
     // Jeœli obiekt jest blokiem
     if(obj_i[wino]==1) {
                  // Jeœli blok nie jest poza ekranem...
@@ -120,19 +136,27 @@ void object_init(int wino) {
                  if(herox<obj_x[wino]+76 && herox>obj_x[wino]+64 && heroy>obj_y[wino]-12 && heroy<obj_y[wino]+76) {
                                          // ...to w ni¹ nie wejdzie.
                                          herox=obj_x[wino]+76;
+                                         grass->scrollX -=cos(herodirection*3.1415/180)*3;
+                                         grass->scrollY +=sin(herodirection*3.1415/180)*3;
                                          }
                  // Analogicznie do innych krawêdzi.
                  if(herox<obj_x[wino] && herox>obj_x[wino]-12 && heroy>obj_y[wino]-12 && heroy<obj_y[wino]+76) {
                                          // ...to w ni¹ nie wejdzie.
                                          herox=obj_x[wino]-12;
+                                         grass->scrollX -=cos(herodirection*3.1415/180)*3;
+                                         grass->scrollY +=sin(herodirection*3.1415/180)*3;
                                          }
                  if(herox<obj_x[wino]+76 && herox>obj_x[wino]-12 && heroy>obj_y[wino]-12 && heroy<obj_y[wino]) {
                                          // ...to w ni¹ nie wejdzie.
                                          heroy=obj_y[wino]-12;
+                                         grass->scrollX -=cos(herodirection*3.1415/180)*3;
+                                         grass->scrollY +=sin(herodirection*3.1415/180)*3;
                                          }
                  if(herox<obj_x[wino]+76 && herox>obj_x[wino]-12 && heroy>obj_y[wino]+64 && heroy<obj_y[wino]+76) {
                                          // ...to w ni¹ nie wejdzie.
                                          heroy=obj_y[wino]+76;
+                                         grass->scrollX -=cos(herodirection*3.1415/180)*3;
+                                         grass->scrollY +=sin(herodirection*3.1415/180)*3;
                                          }
                  }
     if(obj_i[wino]==2) {
@@ -147,15 +171,17 @@ void object_init(int wino) {
                  if(herox<obj_x[wino]+76 && herox>obj_x[wino]+64 && heroy>obj_y[wino]-12 && heroy<obj_y[wino]+76) {
                                          // ...to dostanie obra¿enia.
                          if (heroHP == 0) { 
-                                    }else {
-                                    heroHP=heroHP-10;
-                                    }
+                         }else {
+                         heroHP=heroHP-10;
+                        for(i = 0; i <= 20; i++) {  heromovebackward(); }
+                        i = 0;
+                         }
                          if(hits == 0) {
                              if(oslGetSoundChannel(boli0) == -1) { oslPlaySound(boli0, 0); }
                              hits=hits+1;            
                          }else if(hits == 1) {
-                                             if(oslGetSoundChannel(boli1) == -1) { oslPlaySound(boli1, 0); }
-                             hits=hits+1;
+                                  if(oslGetSoundChannel(boli1) == -1) { oslPlaySound(boli1, 0); }
+                                  hits=hits+1;
                          }else if(hits == 2) {
                                              if(oslGetSoundChannel(boli2) == -1) { oslPlaySound(boli2, 0); }
                              hits=0;
@@ -166,7 +192,9 @@ void object_init(int wino) {
                                          // ...to dostanie obra¿enia.
                          if (heroHP == 0) { 
                                     }else {
-                                    heroHP=heroHP-10;
+                                      heroHP=heroHP-10;
+                                   for(i = 0; i <= 20; i++) {  heromovebackward(); }
+                                    i = 0;
                                     }
                          if(hits == 0) {
                              if(oslGetSoundChannel(boli0) == -1) { oslPlaySound(boli0, 0); }
@@ -184,7 +212,9 @@ void object_init(int wino) {
                          if (heroHP == 0) { 
                                     }else {
                                     heroHP=heroHP-10;
+                                    for(i = 0; i <= 20; i++) {  heromovebackward(); }
                                     }
+                                    i = 0;
                          if(hits == 0) {
                              if(oslGetSoundChannel(boli0) == -1) { oslPlaySound(boli0, 0); }
                              hits=hits+1;            
@@ -201,6 +231,8 @@ void object_init(int wino) {
                          if (heroHP == 0) { 
                                     }else {
                                     heroHP=heroHP-10;
+                                    for(i = 0; i <= 20; i++) {  heromovebackward(); }
+                                    i = 0;
                                     }
                          if(hits == 0) {
                              if(oslGetSoundChannel(boli0) == -1) { oslPlaySound(boli0, 0); }

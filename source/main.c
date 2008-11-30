@@ -21,7 +21,7 @@ int heroHP;
 // menu - ekran tytu³owy
 // blok - symboliczny blok do testowania kolizji
 // hero - bohater
-OSL_IMAGE *menu, *blok, *hero, *trawa, *death, *lava;
+OSL_IMAGE *menuimg, *blok, *hero, *trawa, *death, *lava;
 //Muzyka do gry - pliki mp3, ³adowane z mp3playera
 //Dzwieki do gry - pliki wav, ³adowane z osliba
 OSL_SOUND *steps, *tazor, *boli0, *boli1, *boli2;
@@ -29,7 +29,9 @@ OSL_SOUND *steps, *tazor, *boli0, *boli1, *boli2;
 OSL_MAP *grass;
 #include <oslib/oslib.h>
 #include "mp3player.h"
+#include <time.h>
 int hits;
+int offmode;
 #include "menu.h"
 #include "gameplay.h"
 
@@ -53,7 +55,7 @@ int main(int argc, char* argv[])
 	oslSyncFrame();
 	oslSetQuitOnLoadFailure(1);
     
-    menu = oslLoadImageFile("/data/menu.png", OSL_IN_RAM, OSL_PF_5551);
+    menuimg = oslLoadImageFile("/data/menu.png", OSL_IN_RAM, OSL_PF_5551);
     hero = oslLoadImageFile("/data/texture/hero.png", OSL_IN_RAM, OSL_PF_5551);
     blok = oslLoadImageFile("/data/texture/blok.png", OSL_IN_RAM, OSL_PF_5551);
     trawa = oslLoadImageFile("/data/texture/grasstileset.png", OSL_IN_RAM, OSL_PF_5551);
@@ -68,6 +70,8 @@ int main(int argc, char* argv[])
     boli2 = oslLoadSoundFile("/data/music/grunt2.wav", OSL_FMT_NONE);
     
     oslPrintf("Done. Starting game...");
+    oslPrintf("Wait 3 seconds...");
+    wait(10000000);
     //Skonfiguruj obrazek hero do swobodnego obracania.
     
     hero->centerX = hero->sizeX / 2;

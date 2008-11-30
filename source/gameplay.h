@@ -19,11 +19,13 @@ void gameplay() {
              oslReadKeys();
              //"W³¹cz system œmierci
        if (heroHP == 0) {
+       offmode = 0;
        break;
        }
              // Wy³¹cz grê przy wciœniêciu start.
              if (osl_keys->pressed.start)
-               {  MP3_Stop(); MP3_FreeTune(); oslQuit(); }
+               { offmode = 4; break; 
+               }
              // Zresetuj pozycjê gracza przy wciœniêciu select.
              if (osl_keys->pressed.select)
                { herox=480; heroy=272; herodirection=0; }
@@ -46,7 +48,8 @@ void gameplay() {
              oslPrintf_xy(8,8,"Press start to exit.");
              oslPrintf_xy(8,16,"Press select to reset your position.");
              oslPrintf_xy(8,24,"Press triangle to pause/resume the music.");
-             oslPrintf_xy(8,32,"Player Hp: %d", heroHP);
+             oslPrintf_xy(8,32,"Press start to pause game, press start to resume game.");
+             oslPrintf_xy(8,40,"Player Hp: %d X: %f Y: %f", heroHP, herox, heroy);
              // Skoñcz rysowanie.
 		     oslEndDrawing();
 		     oslSyncFrame();
@@ -54,6 +57,8 @@ void gameplay() {
        oslCls();
        MP3_Stop(); 
        MP3_FreeTune();
+       if (offmode == 0){
+       //death
        oslDrawImage(death);
        oslSetTextColor(RGBA(255,255,255,255));
        oslSetBkColor(RGBA(0,0,0,0));   
@@ -63,6 +68,18 @@ void gameplay() {
        oslSyncFrame();
        oslWaitKey();
        title_screen();
+       } else if (offmode == 1) {
+              //win 1
+              } else if (offmode == 2) {
+                     //win 2
+                     } else if (offmode == 3) {
+                            //win3
+                            } else if (offmode == 4) {
+                                   //menu
+                                   oslEndDrawing();
+                                   oslSyncFrame();
+                                   title_screen();
+                                   }
 }
 
 void heromovefoward() {
@@ -72,16 +89,11 @@ grass->scrollX +=cos(herodirection*3.1415/180)*3;
 grass->scrollY -=sin(herodirection*3.1415/180)*3;
 }
 void heromovebackward(){
-herox-=cos(herodirection*3.1415/180)*2;
-heroy+=sin(herodirection*3.1415/180)*2;
+herox-=cos(herodirection*3.1415/180)*3;
+heroy+=sin(herodirection*3.1415/180)*3;
 grass->scrollX +=cos(herodirection*3.1415/180)*2;
 grass->scrollY -=sin(herodirection*3.1415/180)*2;
 }     
-
-
-
-
-
 
 void hero_init() {
     // Jeœli gracz trzyma strza³kê w lewo...
@@ -110,7 +122,6 @@ void hero_init() {
                               // ...strzela z broni (UWAGA! Narazie TYLKO z Tazora i tylko odtwarzany dzwiek.)
         if(oslGetSoundChannel(tazor) == -1) { oslPlaySound(tazor, 3);	}
                               }
-    if (osl_keys->held.square) { heroHP=0;}
     // Ograniczenia herodirection.
     if(herodirection<0) herodirection+=360;
     if(herodirection>=360) herodirection-=360;

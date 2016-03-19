@@ -1,0 +1,1 @@
+Notrium is a survival game. You are capitan of a space ship, and you crashed onto unknown planet. You must survive!
